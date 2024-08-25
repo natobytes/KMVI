@@ -6,6 +6,9 @@ plugins {
 }
 
 kotlin {
+    jvm()
+    linuxX64()
+
     androidTarget {
         compilations.all {
             kotlinOptions {
