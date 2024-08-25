@@ -44,7 +44,7 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-    - name: Build with Gradle
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        arguments: ${{ matrix.target }}
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+    - name: Run the tests
+      run: ./gradlew ${{ matrix.target }}
