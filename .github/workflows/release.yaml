@@ -9,7 +9,7 @@ jobs:
   deploy:
     name: Deploy library
     runs-on:
-      - ubuntu-latest
+      - macos-latest
 
     steps:
       - uses: actions/checkout@v4
