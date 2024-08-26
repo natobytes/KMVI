@@ -36,10 +36,10 @@ abstract class ViewModel<I : Intent, R : Result, S : State, E : Effect>(
     fun process(intent: I) {
         viewModelScope.launch(coroutineExceptionHandler) {
             processor.process(intent, _state.value)
-                .collect { request ->
-                    when (request) {
-                        is Effect -> _effects.emit(request as E)
-                        is Action -> _state.update { state -> reducer.reduce(request, state) }
+                .collect { result ->
+                    when (result) {
+                        is Effect -> _effects.emit(result as E)
+                        is Action -> _state.update { state -> reducer.reduce(result, state) }
                     }
                 }
         }
