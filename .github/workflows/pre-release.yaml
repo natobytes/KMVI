@@ -1,0 +1,24 @@
+name: Pre-release
+
+on:
+  release:
+    types:
+      - prereleased
+
+jobs:
+  deploy-snapshot:
+    name: Deploy snapshot
+    runs-on:
+      - ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Upload Github
+        env:
+            RELEASE_NAME: ${{ github.event.release.name }}-SNAPSHOT
+            DEPLOY-KEY: ${{ secrets.DEPLOY-KEY }}
+        run: ./gradlew kmvi:publishAllPublicationsToGitHubPackagesRepository
