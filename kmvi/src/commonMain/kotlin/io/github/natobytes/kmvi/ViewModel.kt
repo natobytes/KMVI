@@ -4,11 +4,12 @@ package io.github.natobytes.kmvi
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.natobytes.kmvi.contract.Action
+import io.github.natobytes.kmvi.contract.Effect
 import io.github.natobytes.kmvi.contract.Intent
 import io.github.natobytes.kmvi.contract.Processor
 import io.github.natobytes.kmvi.contract.Reducer
-import io.github.natobytes.kmvi.contract.Request
-import io.github.natobytes.kmvi.contract.SideEffect
+import io.github.natobytes.kmvi.contract.Result
 import io.github.natobytes.kmvi.contract.State
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,7 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-abstract class MviViewModel<I : Intent, R : Request, S : State, E : SideEffect>(
+abstract class ViewModel<I : Intent, R : Result, S : State, E : Effect>(
     initialState: S,
     private val processor: Processor<I, R, S>,
     private val reducer: Reducer<R, S>,
@@ -32,19 +33,19 @@ abstract class MviViewModel<I : Intent, R : Request, S : State, E : SideEffect>(
     private val _effects = MutableSharedFlow<E>()
     val effects: SharedFlow<E> = _effects.asSharedFlow() // Expose as read-only SharedFlow
 
-    fun processIntent(intent: I) {
-        viewModelScope.launch(logUncaughtExceptions) {
+    fun process(intent: I) {
+        viewModelScope.launch(coroutineExceptionHandler) {
             processor.process(intent, _state.value)
-                .collect { request ->
-                    when (request) {
-                        is SideEffect -> _effects.emit(request as E)
-                        else -> _state.update { state -> reducer.reduce(request, state) }
+                .collect { result ->
+                    when (result) {
+                        is Effect -> _effects.emit(result as E)
+                        is Action -> _state.update { state -> reducer.reduce(result, state) }
                     }
                 }
         }
     }
 
-    private val logUncaughtExceptions = CoroutineExceptionHandler { _, throwable ->
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         println("Uncaught exception: $throwable")
     }
 }
