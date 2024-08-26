@@ -1,9 +1,15 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+import java.net.URI
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    id("maven-publish")
 }
+
+group = "io.github.natobytes.kmvi"
+version = System.getenv()["RELEASE_NAME"] ?: "0.1.0"
+
 
 kotlin {
     jvm()
@@ -48,5 +54,18 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = URI("https://maven.pkg.github.com/natobytes/KMVI/")
+            credentials {
+                username = "natobytes"
+                password = System.getenv()["DEPLOY_KEY"] ?: ""
+            }
+        }
     }
 }
