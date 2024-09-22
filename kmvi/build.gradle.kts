@@ -13,6 +13,7 @@ version = System.getenv()["RELEASE_NAME"] ?: "0.1.0"
 
 kotlin {
     jvm()
+    linuxX64()
 
     androidTarget {
         compilations.all {
@@ -21,6 +22,8 @@ kotlin {
             }
         }
     }
+
+    macosX64()
 
     val xcf = XCFramework()
     listOf(
