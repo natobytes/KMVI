@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base",
+    "config:recommended",
     ":dependencyDashboard"
   ],
   "labels": [
@@ -10,9 +10,6 @@
   "rebaseWhen": "conflicted",
   "packageRules": [
     {
-      "matchPackagePatterns": [
-        "*"
-      ],
       "semanticCommitType": "chore",
       "matchUpdateTypes": [
         "major",
@@ -21,7 +18,10 @@
       ],
       "automerge": false,
       "automergeType": "pr",
-      "ignoreTests": true
+      "ignoreTests": true,
+      "matchPackageNames": [
+        "*"
+      ]
     }
   ]
 }
