@@ -39,7 +39,7 @@ jobs:
 
         name: Dev and Draft Releases
         runs-on:
-            - self-hosted
+            - ubuntu-latest
 
         needs:
             - prepare
