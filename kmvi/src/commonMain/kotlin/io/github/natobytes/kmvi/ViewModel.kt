@@ -11,13 +11,18 @@ import io.github.natobytes.kmvi.contract.Processor
 import io.github.natobytes.kmvi.contract.Reducer
 import io.github.natobytes.kmvi.contract.Result
 import io.github.natobytes.kmvi.contract.State
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -25,6 +30,8 @@ abstract class ViewModel<I : Intent, R : Result, S : State, E : Effect>(
     initialState: S,
     private val processor: Processor<I, R, S>,
     private val reducer: Reducer<R, S>,
+    private val computationDispatcher: CoroutineDispatcher = Dispatchers.Default,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(initialState)
@@ -36,12 +43,15 @@ abstract class ViewModel<I : Intent, R : Result, S : State, E : Effect>(
     fun process(intent: I) {
         viewModelScope.launch(coroutineExceptionHandler) {
             processor.process(intent, _state.value)
-                .collect { result ->
+                .flowOn(computationDispatcher)
+                .onEach { result ->
                     when (result) {
                         is Effect -> _effects.emit(result as E)
                         is Action -> _state.update { state -> reducer.reduce(result, state) }
                     }
                 }
+                .flowOn(mainDispatcher)
+                .launchIn(viewModelScope)
         }
     }
 
