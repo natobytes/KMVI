@@ -25,6 +25,6 @@ jobs:
 
       - name: Upload Github
         env:
-            RELEASE_NAME: ${{ github.event.release.name }}-SNAPSHOT
+            RELEASE_NAME: ${{ github.event.release.name }}
             DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
         run: ./gradlew kmvi:publishAllPublicationsToGitHubPackagesRepository
