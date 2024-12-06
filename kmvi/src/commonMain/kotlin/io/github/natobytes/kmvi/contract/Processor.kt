@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
  * intentions ([Intent]s) and determining the appropriate actions or data changes ([Result]s)
  * required to update the application's [State].
  */
-interface Processor<I : Intent, R : Result, S : State> {
+interface Processor<I : Intent, S : State> {
 
     /**
      * Processes an [Intent] and emits a stream of [Result]s based on the current [State].
@@ -18,5 +18,5 @@ interface Processor<I : Intent, R : Result, S : State> {
      * @param state The current [State] of the relevant part of the application.
      * @return A [Flow] of [Result]s that represent the actions or data changes needed to update the state.
      */
-    fun process(input: I, state: S): Flow<R>
+    fun process(input: I, state: S): Flow<Result>
 }
