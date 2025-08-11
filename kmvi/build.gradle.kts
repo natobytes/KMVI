@@ -10,7 +10,8 @@ plugins {
 }
 
 group = "io.github.natobytes.kmvi"
-version = System.getenv()["RELEASE_NAME"] ?: "0.1.0"
+//version = System.getenv()["RELEASE_NAME"] ?: "0.1.0"
+version = "0.1.0-SNAPSHOT"
 
 
 kotlin {

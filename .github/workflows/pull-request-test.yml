@@ -20,8 +20,10 @@ jobs:
         name: Publish snapshot to MavenCentral
         runs-on: macOS-latest
         steps:
-            - name: cenas
-              run: echo $RELEASE_NAME
+            -   name: cenas
+                run: echo "$coisas: $RELEASE_NAME"
+                env:
+                   RELEASE_NAME: ${{ github.event.release.name }}
             -   name: Check out code
                 uses: actions/checkout@v4
             -   name: Set up JDK 21
