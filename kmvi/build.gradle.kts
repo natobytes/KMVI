@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     id("maven-publish")
+    id("com.vanniktech.maven.publish") version "0.34.0"
 }
 
 group = "io.github.natobytes.kmvi"
@@ -46,7 +47,7 @@ kotlin {
 
 android {
     namespace = "io.github.natobytes.kmvi"
-    compileSdk = 34
+    compileSdk = 36
     defaultConfig {
         minSdk = 24
     }
@@ -65,6 +66,40 @@ publishing {
                 username = "natobytes"
                 password = System.getenv()["DEPLOY_KEY"] ?: ""
             }
+        }
+    }
+}
+
+mavenPublishing {
+    publishToMavenCentral()
+
+    signAllPublications()
+
+    coordinates(group.toString(), "kmvi", version.toString())
+
+    pom {
+        name = "KMVI"
+        description = "Kotlin Multiplatform MVI - Architecture Library"
+        inceptionYear = "2025"
+        url = "https://github.com/natobytes/KMVI"
+        licenses {
+            license {
+                name = "The Apache License, Version 2.0"
+                url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                distribution = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
+        }
+        developers {
+            developer {
+                id = "NatoBytes"
+                name = "NatoBytes"
+                url = "https://github.com/natobytes/"
+            }
+        }
+        scm {
+            url = "https://github.com/natobytes/KMVI"
+            connection = "scm:git:git://github.com/natobytes/KMVI.git"
+            developerConnection = "scm:git:ssh://git@github.com/natobytes/KMVI.git"
         }
     }
 }
