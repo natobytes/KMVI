@@ -11,7 +11,7 @@ plugins {
 
 group = "io.github.natobytes"
 //version = System.getenv()["RELEASE_NAME"] ?: "0.1.0"
-version = "0.1.1"
+version = "0.1.2"
 
 
 kotlin {
