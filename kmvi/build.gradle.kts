@@ -56,7 +56,7 @@ android {
 }
 
 mavenPublishing {
-    publishToMavenCentral(false)
+    publishToMavenCentral(true)
     signAllPublications()
 
     coordinates(group.toString(), "kmvi", version.toString())
