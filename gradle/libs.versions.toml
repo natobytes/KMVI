@@ -2,6 +2,7 @@
 agp = "8.12.0"
 kotlin = "2.2.0"
 androidx-lifecycle = "2.8.4"
+mavenPublish = "0.34.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -10,3 +11,4 @@ androidx-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecy
 [plugins]
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+mavenPublish = {id ="com.vanniktech.maven.publish", version.ref = "mavenPublish"}
