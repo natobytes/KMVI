@@ -6,11 +6,11 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     id("maven-publish")
+    id("com.vanniktech.maven.publish") version "0.34.0"
 }
 
-group = "io.github.natobytes.kmvi"
+group = "io.github.natobytes"
 version = System.getenv()["RELEASE_NAME"] ?: "0.1.0"
-
 
 kotlin {
     jvm()
@@ -46,7 +46,7 @@ kotlin {
 
 android {
     namespace = "io.github.natobytes.kmvi"
-    compileSdk = 34
+    compileSdk = 36
     defaultConfig {
         minSdk = 24
     }
@@ -67,4 +67,11 @@ publishing {
             }
         }
     }
+}
+
+mavenPublishing {
+    publishToMavenCentral(false)
+    signAllPublications()
+
+    coordinates(group.toString(), "kmvi", version.toString())
 }
