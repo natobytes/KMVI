@@ -10,9 +10,7 @@ plugins {
 }
 
 group = "io.github.natobytes"
-//version = System.getenv()["RELEASE_NAME"] ?: "0.1.0"
-version = "0.1.2"
-
+version = System.getenv()["RELEASE_NAME"] ?: "0.1.0"
 
 kotlin {
     jvm()
@@ -73,34 +71,7 @@ publishing {
 
 mavenPublishing {
     publishToMavenCentral(false)
-
     signAllPublications()
 
     coordinates(group.toString(), "kmvi", version.toString())
-
-    pom {
-        name = "KMVI"
-        description = "Kotlin Multiplatform MVI - Architecture Library"
-        inceptionYear = "2025"
-        url = "https://github.com/natobytes/KMVI"
-        licenses {
-            license {
-                name = "The Apache License, Version 2.0"
-                url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
-                distribution = "https://www.apache.org/licenses/LICENSE-2.0.txt"
-            }
-        }
-        developers {
-            developer {
-                id = "NatoBytes"
-                name = "NatoBytes"
-                url = "https://github.com/natobytes/"
-            }
-        }
-        scm {
-            url = "https://github.com/natobytes/KMVI"
-            connection = "scm:git:git://github.com/natobytes/KMVI.git"
-            developerConnection = "scm:git:ssh://git@github.com/natobytes/KMVI.git"
-        }
-    }
 }

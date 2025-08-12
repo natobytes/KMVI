@@ -1,3 +1,6 @@
+# https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-publish-libraries.html#publish-to-maven-central-using-continuous-integration
+
+
 name: Pre-release
 
 on:
@@ -28,3 +31,24 @@ jobs:
             RELEASE_NAME: ${{ github.event.release.name }}
             DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
         run: ./gradlew kmvi:publishAllPublicationsToGitHubPackagesRepository
+
+  publish-maven:
+      name: Publish snapshot to MavenCentral
+      runs-on: macOS-latest
+      steps:
+          -   name: Check out code
+              uses: actions/checkout@v4
+          -   name: Set up JDK 21
+              uses: actions/setup-java@v4
+              with:
+                  distribution: 'zulu'
+                  java-version: 21
+          -   name: Publish to MavenCentral
+              run: ./gradlew publishToMavenCentral --no-configuration-cache
+              env:
+                  RELEASE_NAME: ${{ github.event.release.name }}-SNAPSHOT
+                  ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+                  ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+                  ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
+                  ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+                  ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY_CONTENTS }}
