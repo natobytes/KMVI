@@ -9,31 +9,8 @@ on:
       - prereleased
 
 jobs:
-  deploy-snapshot:
-    name: Deploy snapshot
-    runs-on:
-      - macos-latest
-
-    steps:
-      - uses: actions/checkout@v5
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-            java-version: '17'
-            distribution: 'temurin'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Upload Github
-        env:
-            RELEASE_NAME: ${{ github.event.release.name }}
-            DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
-        run: ./gradlew kmvi:publishAllPublicationsToGitHubPackagesRepository
-
   publish-maven:
-      name: Publish snapshot to MavenCentral
+      name: Publish to MavenCentral
       runs-on: macOS-latest
       steps:
           -   name: Check out code
@@ -46,7 +23,7 @@ jobs:
           -   name: Publish to MavenCentral
               run: ./gradlew publishToMavenCentral --no-configuration-cache
               env:
-                  RELEASE_NAME: ${{ github.event.release.name }}-SNAPSHOT
+                  RELEASE_NAME: ${{ github.event.release.name }}
                   ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
                   ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
                   ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}

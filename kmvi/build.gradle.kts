@@ -1,12 +1,11 @@
+
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
-import java.net.URI
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    id("maven-publish")
-    id("com.vanniktech.maven.publish") version "0.34.0"
+    alias(libs.plugins.mavenPublish)
 }
 
 group = "io.github.natobytes"
@@ -53,19 +52,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-    }
-}
-
-publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = URI("https://maven.pkg.github.com/natobytes/KMVI/")
-            credentials {
-                username = "natobytes"
-                password = System.getenv()["DEPLOY_KEY"] ?: ""
-            }
-        }
     }
 }
 
