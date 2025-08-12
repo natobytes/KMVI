@@ -1,3 +1,6 @@
+![Maven Central Version](https://img.shields.io/maven-central/v/io.github.natobytes/kmvi)
+
+
 # KMVI - Kotlin Multiplatform MVI - Architecture Library
 
 **A robust and flexible framework for building modern, maintainable, and testable applications across multiple platforms using the Model-View-Intent (MVI) pattern.**
@@ -24,3 +27,8 @@ This library provides a set of core components and utilities to streamline the i
 * **Reducer:** A pure function that takes the current state and an Action and returns a new, immutable state.
 * **Processor:** Processes Intents and transforms them into a stream of Results.
 * **Store:** Manages the application's state, handles Intents, and emits new states.
+
+## Import 
+```
+implementation("io.github.natobytes:kmvi:{version}")
+```
