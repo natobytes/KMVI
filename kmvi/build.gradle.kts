@@ -20,16 +20,6 @@ kotlin {
         }
     }
 
-    androidLibrary {
-        namespace = "io.github.natobytes.kmvi"
-        compileSdk = 36
-        minSdk = 24
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_21
-            targetCompatibility = JavaVersion.VERSION_21
-        }
-    }
-
     val xcf = XCFramework()
     listOf(
         iosX64(),
@@ -50,6 +40,18 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
+    }
+}
+
+android {
+    namespace = "io.github.natobytes.kmvi"
+    compileSdk = 36
+    defaultConfig {
+        minSdk = 24
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
