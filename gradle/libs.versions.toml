@@ -1,7 +1,7 @@
 [versions]
 agp = "8.13.2"
 kotlin = "2.3.0"
-androidx-lifecycle = "2.9.3"
+androidx-lifecycle = "2.9.6"
 mavenPublish = "0.36.0"
 
 [libraries]
