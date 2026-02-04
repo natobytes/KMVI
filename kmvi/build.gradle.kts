@@ -16,8 +16,14 @@ kotlin {
 
     androidTarget {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_1_8)
+            jvmTarget.set(JvmTarget.JVM_21)
         }
+    }
+
+    androidLibrary {
+        namespace = "io.github.natobytes.kmvi"
+        compileSdk = 36
+        minSdk = 24
     }
 
     val xcf = XCFramework()
@@ -40,18 +46,6 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
-    }
-}
-
-android {
-    namespace = "io.github.natobytes.kmvi"
-    compileSdk = 36
-    defaultConfig {
-        minSdk = 24
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
