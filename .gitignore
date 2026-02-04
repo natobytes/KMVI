@@ -391,3 +391,4 @@ obj/
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,swift,android,swiftpm,intellij+all,androidstudio,swiftpackagemanager,kotlin
+PR77_FIX_SUMMARY.md
