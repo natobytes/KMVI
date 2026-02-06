@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "KMVI"
 include(":kmvi")
+include(":sample")
