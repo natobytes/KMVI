@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -61,7 +60,6 @@ abstract class ViewModel<I : Intent, R : Result, E : Effect, S : State>(
     private val reducer: Reducer<R, S>,
     private val computationDispatcher: CoroutineDispatcher = Dispatchers.Default,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-    private val onError: ((Throwable) -> Unit)? = null
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(initialState)

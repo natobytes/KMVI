@@ -70,14 +70,12 @@ class TestReducer : Reducer<TestResult, TestState> {
 @OptIn(ExperimentalCoroutinesApi::class)
 class TestViewModel(
     initialState: TestState = TestState(),
-    onError: ((Throwable) -> Unit)? = null
 ) : ViewModel<TestIntent, TestResult, TestResult, TestState>(
     initialState = initialState,
     processor = TestProcessor(),
     reducer = TestReducer(),
     computationDispatcher = UnconfinedTestDispatcher(),
     mainDispatcher = UnconfinedTestDispatcher(),
-    onError = onError
 )
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -87,39 +85,39 @@ class ViewModelTest {
     fun `initial state is set correctly`() = runTest {
         val initialState = TestState(count = 5, message = "initial")
         val viewModel = TestViewModel(initialState)
-        
+
         assertEquals(initialState, viewModel.state.value)
     }
 
     @Test
     fun `process intent updates state through reducer`() = runTest {
         val viewModel = TestViewModel()
-        
+
         viewModel.process(TestIntent.Increment)
         delay(100) // Give time for processing
-        
+
         assertEquals(1, viewModel.state.value.count)
     }
 
     @Test
     fun `multiple intents are processed sequentially`() = runTest {
         val viewModel = TestViewModel()
-        
+
         viewModel.process(TestIntent.Increment)
         viewModel.process(TestIntent.Increment)
         viewModel.process(TestIntent.Decrement)
         delay(100)
-        
+
         assertEquals(1, viewModel.state.value.count)
     }
 
     @Test
     fun `state message is updated correctly`() = runTest {
         val viewModel = TestViewModel()
-        
+
         viewModel.process(TestIntent.SetMessage("Hello"))
         delay(100)
-        
+
         assertEquals("Hello", viewModel.state.value.message)
     }
 
@@ -127,59 +125,29 @@ class ViewModelTest {
     fun `effects are emitted correctly`() = runTest {
         val viewModel = TestViewModel()
         val effects = mutableListOf<TestResult>()
-        
+
         // Collect effects in background
         val job = kotlinx.coroutines.launch {
             viewModel.effects.take(1).toList(effects)
         }
-        
+
         viewModel.process(TestIntent.TriggerEffect)
         delay(100)
         job.cancel()
-        
+
         assertEquals(1, effects.size)
         assertTrue(effects.first() is TestResult.ShowToast)
         assertEquals("Effect triggered", (effects.first() as TestResult.ShowToast).message)
     }
 
     @Test
-    fun `errors are emitted to error flow`() = runTest {
-        val viewModel = TestViewModel()
-        val errors = mutableListOf<Throwable>()
-        
-        val job = kotlinx.coroutines.launch {
-            viewModel.errors.take(1).toList(errors)
-        }
-        
-        viewModel.process(TestIntent.ThrowError)
-        delay(100)
-        job.cancel()
-        
-        assertEquals(1, errors.size)
-        assertTrue(errors.first() is IllegalStateException)
-        assertEquals("Test error", errors.first().message)
-    }
-
-    @Test
-    fun `custom error handler is invoked`() = runTest {
-        var capturedError: Throwable? = null
-        val viewModel = TestViewModel(onError = { capturedError = it })
-        
-        viewModel.process(TestIntent.ThrowError)
-        delay(100)
-        
-        assertNotNull(capturedError)
-        assertTrue(capturedError is IllegalStateException)
-    }
-
-    @Test
     fun `state updates maintain immutability`() = runTest {
         val viewModel = TestViewModel(TestState(count = 10))
         val initialState = viewModel.state.value
-        
+
         viewModel.process(TestIntent.Increment)
         delay(100)
-        
+
         // Initial state should not be modified
         assertEquals(10, initialState.count)
         // New state should be updated
@@ -190,15 +158,15 @@ class ViewModelTest {
     fun `reducer is pure function test`() = runTest {
         val reducer = TestReducer()
         val initialState = TestState(count = 5, message = "test")
-        
+
         val result1 = reducer.reduce(TestResult.UpdateCount(2), initialState)
         val result2 = reducer.reduce(TestResult.UpdateCount(2), initialState)
-        
+
         // Same inputs should produce same outputs
         assertEquals(result1, result2)
         assertEquals(7, result1.count)
         assertEquals(7, result2.count)
-        
+
         // Original state should not be modified
         assertEquals(5, initialState.count)
     }
