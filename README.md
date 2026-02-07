@@ -8,8 +8,8 @@ A lightweight Kotlin Multiplatform MVI (Model-View-Intent) library built on top 
 
 Add the dependency to your `build.gradle.kts`:
 
-```kotlin
-// Version catalog (gradle/libs.versions.toml)
+```toml
+# Version catalog (gradle/libs.versions.toml)
 [versions]
 kmvi = "<version>"
 
