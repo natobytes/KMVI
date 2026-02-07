@@ -25,22 +25,22 @@ KMVI is a Kotlin Multiplatform MVI (Model-View-Intent) architecture library publ
 ./gradlew build
 ```
 
-JDK 17 (Temurin) is used in CI. JDK 21 (Zulu) is used for release publishing.
+JDK 21 (Temurin) is used in CI. JDK 21 (Zulu) is used for release publishing.
 
 ## Architecture
 
 The entire library lives in `kmvi/src/commonMain/kotlin/io/github/natobytes/kmvi/`. It's a small, focused codebase (~155 lines of core code) with five contract interfaces and one abstract ViewModel class.
 
-**Data flow:** `Intent → Processor → Flow<Result> → ViewModel → (Action → Reducer → State) | (Effect → SharedFlow)`
+**Data flow:** `Intent → Processor → Flow<Result> → ViewModel → (Action → Reducer → State) | (Effect → Flow)`
 
 Core types in `contract/`:
 - **Intent** — marker interface for user actions
 - **State** — marker interface for immutable UI state
 - **Result** — sealed interface with subtypes `Action` (state mutations) and `Effect` (side effects like navigation)
 - **Processor** — transforms `Intent` + current `State` into `Flow<Result>`
-- **Reducer** — pure function: `(Result, State) → State`
+- **Reducer** — pure function: `(Action, State) → State`
 
-**ViewModel** (`ViewModel.kt`) — abstract class generic over `<I: Intent, R: Result, E: Effect, S: State>`. Extends AndroidX `ViewModel`, uses `viewModelScope` for coroutine management. Exposes `state: StateFlow<S>` and `effects: SharedFlow<E>`. Entry point is `process(intent)`. Processor runs on computation dispatcher (Default), results collected on main dispatcher.
+**KMVIViewModel** (`KMVIViewModel.kt`) — abstract class generic over `<I: Intent, A: Action, E: Effect, S: State>`. Extends AndroidX `ViewModel`, uses `viewModelScope` for coroutine management. Exposes `state: StateFlow<S>` and `effects: Flow<E>` (backed by buffered Channel). Entry point is `process(intent)`. Processor runs on computation dispatcher (Default), results collected on main dispatcher.
 
 ## Code Style
 
@@ -60,4 +60,4 @@ Core types in `contract/`:
 ## Module Structure
 
 - `kmvi/` — the library (multiplatform)
-- `sample/` — example project (placeholder)
+- `sample/` — Todo List example (JVM-only KMP module demonstrating the library)
