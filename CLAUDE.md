@@ -25,7 +25,7 @@ KMVI is a Kotlin Multiplatform MVI (Model-View-Intent) architecture library publ
 ./gradlew build
 ```
 
-JDK 21 (Temurin) is used in CI. JDK 21 (Zulu) is used for release publishing.
+JDK 21 (Temurin) is used in CI and for release publishing.
 
 ## Architecture
 
