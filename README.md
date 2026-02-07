@@ -38,6 +38,10 @@ implementation("io.github.natobytes:kmvi:<version>")
 
 KMVI supports **JVM**, **Android**, and **iOS** (x64, ARM64, Simulator ARM64 via XCFramework).
 
+### Sample
+
+See the [`sample/`](sample/) module for a complete Todo List example demonstrating collections, multiple intents, and effects (undo on remove).
+
 ## Architecture
 
 KMVI implements a unidirectional data flow:
