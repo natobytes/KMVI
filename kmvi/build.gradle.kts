@@ -11,6 +11,8 @@ group = "io.github.natobytes"
 version = System.getenv()["RELEASE_NAME"] ?: "0.1.0"
 
 kotlin {
+    explicitApi()
+
     jvm()
 
     android {
@@ -37,6 +39,7 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
         }
     }
 }
