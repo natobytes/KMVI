@@ -33,10 +33,14 @@ The entire library lives in `kmvi/src/commonMain/kotlin/io/github/natobytes/kmvi
 
 **Data flow:** `Intent → Processor → Flow<Result> → ViewModel → (Action → Reducer → State) | (Effect → Flow)`
 
-Core types in `contract/`:
+Core contract types in `contract/`:
 - **Intent** — marker interface for user actions
 - **State** — marker interface for immutable UI state
 - **Result** — sealed interface with subtypes `Action` (state mutations) and `Effect` (side effects like navigation)
+- **Action** — represents a state mutation to be applied by the reducer
+- **Effect** — represents a one-off side effect (e.g., navigation, toasts)
+
+Processing types in `io.github.natobytes.kmvi`:
 - **Processor** — transforms `Intent` + current `State` into `Flow<Result>`
 - **Reducer** — pure function: `(Action, State) → State`
 
