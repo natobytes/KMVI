@@ -9,4 +9,4 @@ package io.github.natobytes.kmvi.contract
  * They are emitted by the View and consumed by the ViewModel, which processes them and
  * updates the Model accordingly.
  */
-interface Intent
+public interface Intent

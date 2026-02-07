@@ -7,4 +7,4 @@ package io.github.natobytes.kmvi.contract
  * snapshot of the application's relevant data and UI properties, ensuring predictable rendering and simplifying
  * state management.
  */
-interface State
+public interface State
