@@ -1,5 +1,4 @@
 
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
@@ -14,10 +13,9 @@ version = System.getenv()["RELEASE_NAME"] ?: "0.1.0"
 kotlin {
     jvm()
 
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_21)
-        }
+    android {
+        namespace = "io.github.natobytes.kmvi"
+        compileSdk = 36
     }
 
     val xcf = XCFramework()
@@ -40,18 +38,6 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
-    }
-}
-
-android {
-    namespace = "io.github.natobytes.kmvi"
-    compileSdk = 36
-    defaultConfig {
-        minSdk = 24
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
