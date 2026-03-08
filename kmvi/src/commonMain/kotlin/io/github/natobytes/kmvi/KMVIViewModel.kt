@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 public abstract class KMVIViewModel<I : Intent, A : Action, E : Effect, S : State>(
     initialState: S,
@@ -38,7 +39,7 @@ public abstract class KMVIViewModel<I : Intent, A : Action, E : Effect, S : Stat
 
     init {
         intents
-            .onEach { intent -> processIntent(intent) }
+            .onEach { intent -> viewModelScope.launch { processIntent(intent) } }
             .launchIn(viewModelScope)
     }
 
