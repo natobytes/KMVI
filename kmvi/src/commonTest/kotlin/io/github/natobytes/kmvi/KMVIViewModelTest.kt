@@ -7,7 +7,9 @@ import io.github.natobytes.kmvi.contract.Result
 import io.github.natobytes.kmvi.contract.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
@@ -46,6 +48,7 @@ class KMVIViewModelTest {
         data object TriggerEffect : TestIntent
         data object TriggerError : TestIntent
         data object EmitMultiple : TestIntent
+        data object StartLongRunning : TestIntent
     }
 
     data class TestState(
@@ -63,7 +66,9 @@ class KMVIViewModelTest {
             TestEffect
     }
 
-    class TestProcessor : Processor<TestIntent, TestState> {
+    class TestProcessor(
+        val longRunningFlow: MutableSharedFlow<Result> = MutableSharedFlow(),
+    ) : Processor<TestIntent, TestState> {
         override fun process(
             input: TestIntent,
             state: TestState,
@@ -77,6 +82,8 @@ class KMVIViewModelTest {
                 emit(TestAction.CountIncremented)
                 emit(TestEffect.ShowToast("done"))
             }
+
+            is TestIntent.StartLongRunning -> longRunningFlow
         }
     }
 
@@ -92,10 +99,11 @@ class KMVIViewModelTest {
 
     class TestKMVIViewModel(
         initialState: TestState = TestState(),
+        processor: TestProcessor = TestProcessor(),
         val errors: MutableList<Throwable> = mutableListOf(),
     ) : KMVIViewModel<TestIntent, TestAction, TestEffect, TestState>(
         initialState = initialState,
-        processor = TestProcessor(),
+        processor = processor,
         reducer = TestReducer(),
         computationDispatcher = Dispatchers.Unconfined,
     ) {
@@ -173,6 +181,31 @@ class KMVIViewModelTest {
         assertEquals(1, collectedEffects.size)
         assertEquals(TestEffect.ShowToast("done"), collectedEffects.first())
         job.cancel()
+    }
+
+    @Test
+    fun longRunningFlowDoesNotBlockSubsequentIntents() = runTest {
+        val processor = TestProcessor()
+        val vm = TestKMVIViewModel(processor = processor)
+
+        // Start a long-running (never-completing) flow
+        vm.process(TestIntent.StartLongRunning)
+        advanceUntilIdle()
+
+        // Emit an action through the long-running flow to prove it's active
+        processor.longRunningFlow.emit(TestAction.NameUpdated("from-long-running"))
+        advanceUntilIdle()
+        assertEquals("from-long-running", vm.state.value.name)
+
+        // Process a new intent — must NOT be blocked by the long-running flow
+        vm.process(TestIntent.IncrementCount)
+        advanceUntilIdle()
+        assertEquals(1, vm.state.value.count)
+
+        // Long-running flow should still be active
+        processor.longRunningFlow.emit(TestAction.NameUpdated("still-active"))
+        advanceUntilIdle()
+        assertEquals("still-active", vm.state.value.name)
     }
 
     @Test
