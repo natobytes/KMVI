@@ -1,7 +1,7 @@
 [versions]
 agp = "9.1.0"
 kotlin = "2.3.10"
-androidx-lifecycle = "2.9.6"
+androidx-lifecycle = "2.10.0"
 kotlinx-coroutines = "1.10.2"
 mavenPublish = "0.36.0"
 
