@@ -17,3 +17,4 @@ dependencyResolutionManagement {
 rootProject.name = "KMVI"
 include(":kmvi")
 include(":sample")
+include(":teslaDrive")
