@@ -18,20 +18,14 @@ jobs:
       matrix:
         include:
           - target: check
-            os: macos-latest
           - target: iosSimulatorArm64Test
-            os: macos-latest
           - target: jvmTest
-            os: ubuntu-latest
           - target: :kmvi:compileKotlinJvm
-            os: ubuntu-latest
           - target: :sample:compileKotlinJvm
-            os: ubuntu-latest
           - target: :teslaDrive:assembleDebug
-            os: ubuntu-latest
           - target: :teslaDrive:testDebugUnitTest
-            os: ubuntu-latest
-    runs-on: ${{ matrix.os }}
+    runs-on: self-hosted
+    timeout-minutes: 30
 
     steps:
     - uses: actions/checkout@v4
@@ -54,6 +48,6 @@ jobs:
 
   verify:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - run: echo "All checks passed"
