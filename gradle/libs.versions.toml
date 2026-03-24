@@ -22,7 +22,7 @@ compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
-documentfile = { module = "androidx.documentfile:documentfile", version = "1.0.1" }
+documentfile = { module = "androidx.documentfile:documentfile", version = "1.1.0" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
