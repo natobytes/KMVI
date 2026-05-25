@@ -1,5 +1,5 @@
 [versions]
-agp = "9.1.0"
+agp = "9.2.1"
 kotlin = "2.3.21"
 androidx-lifecycle = "2.10.0"
 kotlinx-coroutines = "1.11.0"
